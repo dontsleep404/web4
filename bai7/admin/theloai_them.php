@@ -1,57 +1,58 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<?php
+include 'config.php';
+include 'class.db.theloai.php';
+if (isset($_POST['submit'])) {
+    $db_theloai = new DB_TheLoai();
+    $ten_theloai = (isset($_POST['ten_theloai'])) ? $_POST['ten_theloai'] : "";
+    $thu_tu = (isset($_POST['thu_tu'])) ? $_POST['thu_tu'] : 0;
+    $an_hien = (isset($_POST['an_hien'])) ? $_POST['an_hien'] : "";
+    $result = $db_theloai->them_theloai($ten_theloai, $thu_tu, $an_hien);
+    if ($result) {
+        echo '<script>alert("Thêm thành công!"); window.location="theloai.php";</script>';
+    } else {
+        echo '<script>alert("Thêm không thành công!");
+window.location="theloai.php";</script>';
+    }
+}
+?>
+<!DOCTYPE html>
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Untitled Document</title>
+<title>THỂ LOẠI | QUẢN TRỊ</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
-
 <body>
-<form action="theloai_them_xl.php" method="post" enctype="multipart/form-data" name="form1">
-	<table align="left"  width="400">
-	<tr>
-	<td align="right">
-	Ten The Loai
-</td>
+<div class="container">
+<h1>Thêm thể loại</h1>
+<form name="them_theloai" method="POST">
+<table width="100%">
+<tr>
+<td>Tên thể loại: </td>
+<td><input type="text" name="ten_theloai"></td>
+</tr>
+<tr>
+<td>Thứ tự: </td>
+<td><input type="text" name="thu_tu" value="0"></td>
+</tr>
+<tr>
+<td>Ẩn/Hiện: </td>
 <td>
-	<input type="text" name="TenTL" value="" />
+<select name="an_hien">
+<option value="1" selected="selected">Hiện</option>
+<option value="0">Ẩn</option>
+</select>
 </td>
 </tr>
 <tr>
-	<td align="right">
-	Thu Tu
-</td>
-<td>
-	<input type="text" name="ThuTu" value="" />
-</td>
-</tr>
-<tr>
-	<td align="right">
-	An Hien
-</td>
-<td>
-	<select name="AnHien">
-	<option value="0">An</option>
-	<option value="1">Hien</option>
-	</select>
-</td>
-</tr>
-<tr>
-  <td align="right">icon</td>
-  <td>
-    <input type="file" name="image" id="anh" />
-
-    </td>
-</tr>
-<tr>
-	<td align="right">
-		<input type="submit" name="Them" value="Them" />
-</td>
-<td>
-	<input type="reset" name="Huy" value="Huy" />
-</td>
+<td colspan="2"><input type="submit" value="Thêm thể loại"
+name="submit"></td>
 </tr>
 </table>
 </form>
-
+</div>
 </body>
 </html>

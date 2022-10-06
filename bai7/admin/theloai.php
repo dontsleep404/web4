@@ -1,52 +1,48 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Untitled Document</title>
-</head>
-
-<body>
-<?php include_once '../connect.php';?>
-<table align="center" border="1" width="600">
-	<tr align="center">
-	<td>Ten The Loai</td>
-<td>Thu Tu</td>
-<td>An Hien</td>
-<td>Bieu tuong</td>
-<td colspan="2"><a href="theloai_them.php">Them</a></td>
-</tr>
 <?php
-$sql = "select * from theloai";
-$results = mysqli_query($connect, $sql);
-while (($rows = mysqli_fetch_assoc($results)) != null) {
-    ?>
-<tr align="center">
-	<td>
-	<?php echo $rows['TenTL']; ?>
-</td>
-<td>
-	<?php echo $rows['ThuTu']; ?>
-</td>
-<td>
-	<?php if ($rows['AnHien'] == 1) {
-        echo "Hien";
-    } else {
-        echo "An";
+include 'config.php';
+include 'class.db.theloai.php';
+$db_theloai = new DB_TheLoai();
+$theloai_arr = $db_theloai->get_theloai();
+$theloai_html = "";
+if (count($theloai_arr) == 0) {
+    $theloai_html = 'Không có thể loại
+<a href="theloai_them.php">THÊM THỂ LOẠI</a>';
+} else {
+    $theloai_html = '<h1>Quản trị thể loại</h1>
+<table width="100%" id="bang_quantri" cellpadding
+="10" cellspacing="0">
+<tr><th>Tên thể loại</th><th>Thứ tự</th>
+<th>Ẩn hiện</th><th colspan="2">
+<a href="theloai_them.php">Thêm Thể Loại</a></th>
+</tr>';
+    foreach ($theloai_arr as $item) {
+        $theloai_html .= '<tr>';
+        $theloai_html .= '<td>' . $item['TenTL'] . '</td>';
+        $theloai_html .= '<td>' . $item['ThuTu'] . '</td>';
+        $theloai_html .= '<td>' . $item['AnHien'] . '</td>';
+        $theloai_html .= '<td><a href="sua_theloai.php?id=
+' . $item['idTL'] . '">Sửa</a></td>';
+        $theloai_html .= '<td><a href="delete.php?id=
+' . $item['idTL'] .
+            '" onclick="return confirm(\'Bạn có thực
+sự muốn xóa\');">Xóa</a></td>';
+        $theloai_html .= '</tr>';
     }
-    ?>
-</td>
- <td><img src="../image/<?php echo $rows['icon'] ?>" width="40" height="40" /></td>
-<td>
-	<a href="theloai_sua.php?idTL=<?php echo $rows['idTL']; ?>">Sua</a>
-</td>
-<td>
-	<a href="theloai_xoa.php?idTL=<?php echo $rows['idTL']; ?>" onclick="return confirm('Ban co chac chan khong?');">xoa</a>
-</td>
-</tr>
-<?php }
-mysqli_close($connect);
+    $theloai_html .= '</table>';
+}
 ?>
-</table>
-
+<!DOCTYPE html>
+<html>
+<head>
+<title>THỂ LOẠI | QUẢN TRỊ</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+<?php echo $theloai_html; ?>
+</div>
 </body>
 </html>
